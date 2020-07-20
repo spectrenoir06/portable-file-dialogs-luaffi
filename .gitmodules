@@ -1,0 +1,3 @@
+[submodule "portable-file-dialogs"]
+	path = portable-file-dialogs
+	url = git@github.com:samhocevar/portable-file-dialogs.git
