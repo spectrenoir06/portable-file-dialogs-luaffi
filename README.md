@@ -34,7 +34,7 @@ end
 pdf.notify(
     "Title 🔥",
     "Text",
-    pdf.icone.warning
+    pdf.icon.warning
 )
 ```
 
