@@ -95,32 +95,4 @@ function pdf.select_folder(title, default_path, option)
 	return (ffi.string(ret))
 end
 
-
-print(pdf.select_folder("test"))
-
--- pdf.notify("test3 🔥", "test2 🔥", 3)
---
--- local t = pdf.message(
--- 	"test3 🔥",
--- 	"test2 🔥",
--- 	pdf.choice.ok,
--- 	pdf.icon.error
--- )
---
--- print("t=", t)
---
--- local filter = {
--- 	"Image Files",
--- 	"*.png *.jpg *.jpeg *.bmp",
--- 	"Audio Files",
--- 	"*.wav *.mp3",
--- 	"All Files",
--- 	"*"
--- }
-
--- local t = pdf.open_file("title", "/", filter, pdf.opt.multiselect)
--- for k,v in ipairs(t) do print(k,v) end
-
-
-
 return pdf
