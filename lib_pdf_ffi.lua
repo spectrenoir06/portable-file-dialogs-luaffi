@@ -38,9 +38,11 @@ pdf.opt = {
 
 
 ffi.cdef[[
-	void notify(const char *title, const char *message, int8_t icon);
+	void   notify(const char *title, const char *message, int8_t icon);
 	int8_t message(const char *title, const char *text, int8_t choice, int8_t icon);
 	char** open_file(const char *title, const char *initial_path, const char **filters, int8_t option, uint8_t filter_size);
+	char*  save_file(const char *title, const char *initial_path, const char **filters, int8_t option, uint8_t filter_size);
+	char*  select_folder(const char *title, const char *default_path, int8_t option);
 ]]
 
 
@@ -55,19 +57,46 @@ local function convert_string_2d(ptr)
 end
 
 function pdf.notify(title, message, icon)
+	icon = icon or pdf.icon.info
 	pdf_lib.notify(title, message, icon)
 end
 
 function pdf.message(title, text, choice, icon)
+	choice = choice or pdf.choice.ok_cancel
+	icon = icon or pdf.icon.info
 	return pdf_lib.message(title, text, choice, icon)
 end
 
 function pdf.open_file(title, initial_path, filter, option)
+	initial_path = initial_path or ""
+	filter = filter or {"All Files", "*"}
+	option = option or pdf.opt.none
+
 	local str_ptr = ffi.new("const char*[?]", #filter + 1, filter)
 	local ret = pdf_lib.open_file(title, initial_path, str_ptr, option, #filter)
 	return (convert_string_2d(ret))
 end
 
+function pdf.save_file(title, initial_path, filter, option)
+	initial_path = initial_path or ""
+	filter = filter or {"All Files", "*"}
+	option = option or pdf.opt.none
+
+	local str_ptr = ffi.new("const char*[?]", #filter + 1, filter)
+	local ret = pdf_lib.save_file(title, initial_path, str_ptr, option, #filter)
+	return (ffi.string(ret))
+end
+
+function pdf.select_folder(title, default_path, option)
+	default_path = default_path or ""
+	option = option or pdf.opt.none
+
+	local ret = pdf_lib.select_folder(title, default_path, option)
+	return (ffi.string(ret))
+end
+
+
+print(pdf.select_folder("test"))
 
 -- pdf.notify("test3 🔥", "test2 🔥", 3)
 --
@@ -88,7 +117,7 @@ end
 -- 	"All Files",
 -- 	"*"
 -- }
---
+
 -- local t = pdf.open_file("title", "/", filter, pdf.opt.multiselect)
 -- for k,v in ipairs(t) do print(k,v) end
 

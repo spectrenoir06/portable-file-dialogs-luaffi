@@ -30,16 +30,6 @@ char **strlist(const std::vector<std::string>& input)
 	}
 }
 
-void del_strlist(char *const *strings)
-{
-	// First string is the allocated storage
-	delete[] strings[0];
-	delete[] strings;
-}
-
-
-
-
 extern "C" {
 	void notify(const char *title, const char *message, pfd::icon icon) {
 		pfd::notify(
@@ -67,10 +57,36 @@ extern "C" {
 			option
 		).result();
 
-	char** ptr = strlist(strs);
-
-	// del_strlist(v);
-
-	return ptr;
+		char** ptr = strlist(strs);
+		return ptr;
 	}
+
+	char* save_file(const char *title, const char *initial_path, char **filters, pfd::opt option, uint8_t filter_size) {
+		std::vector<std::string> myvector(filters, filters+filter_size);
+		std::string str = pfd::save_file(
+			title,
+			initial_path,
+			myvector,
+			option
+		).result();
+
+		char *cstr = new char[str.length() + 1];
+		strcpy(cstr, str.c_str());
+
+		return(cstr);
+	}
+
+	char* select_folder(const char *title, const char *default_path, pfd::opt option) {
+		std::string str = pfd::select_folder(
+			title,
+			default_path,
+			option
+		).result();
+
+		char *cstr = new char[str.length() + 1];
+		strcpy(cstr, str.c_str());
+
+		return(cstr);
+	}
+
 }
